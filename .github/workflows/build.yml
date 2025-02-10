@@ -1,3 +1,4 @@
+name: Build test
 on: push
 jobs:
   first_job :
