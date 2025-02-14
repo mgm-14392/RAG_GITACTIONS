@@ -64,7 +64,6 @@ pydantic==2.10.6
 pydantic-settings==2.7.1
 pydantic_core==2.27.2
 python-dotenv==1.0.1
-pywin32==308
 regex==2024.11.6
 requests-toolbelt==1.0.0
 rsa==4.9
