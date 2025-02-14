@@ -12,6 +12,7 @@ from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langgraph.graph import START, StateGraph
 from typing_extensions import List, TypedDict
+import sys
 
 
 # Define State structure outside the class for accessibility
@@ -101,11 +102,15 @@ class RAGSystem:
         response = self.graph.invoke({"question": question})
         return response["answer"]
 
-# Example with dynamic URL
-#rag_system = RAGSystem(website_url="https://example.com/some-article")
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        website = sys.argv[1]  # Access the argument
+        # Example with dynamic URL
+        rag_system = RAGSystem(website_url=website)
 
-# Or you can still use the default URL if you don't pass one
-rag_system_default = RAGSystem()
+    else:
+        # Or you can still use the default URL if you don't pass one
+        rag_system_default = RAGSystem()
 
-answer_default = rag_system_default.ask_question("What is Task Decomposition?")
-print(answer_default)
+    answer_default = rag_system_default.ask_question("What is Task Decomposition?")
+    print(answer_default)
