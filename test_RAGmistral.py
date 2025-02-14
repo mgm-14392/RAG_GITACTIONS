@@ -63,6 +63,8 @@ def test_generate_function(setup_rag_system):
     """Test the generate function."""
     mock_llm = MagicMock()
     mock_llm.invoke.return_value = MagicMock(content="Mocked LLM response")
+
+    setup_rag_system.llm = mock_llm
     
     state = {
         "question": "What is Task Decomposition?",
