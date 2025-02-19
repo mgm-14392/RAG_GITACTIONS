@@ -30,11 +30,11 @@ class RAGSystem:
         self.MISTRAL_KEY = mistral_key or os.getenv("MISTRAL_API_KEY")
 
         if not self.OPENAI_KEY:
-            self.OPENAI_KEY = getpass.getpass("Enter API key for OpenAI: ")
+            raise ValueError("OPENAI_API_KEY is not set. Please set it in your environment.")
         if not self.LANGSMITH_KEY:
-            self.LANGSMITH_KEY = getpass.getpass("Enter API key for Lansmith: ")
+            raise ValueError("LANGSMITH_KEY is not set. Please set it in your environment.")
         if not self.MISTRAL_KEY:
-            self.MISTRAL_KEY = getpass.getpass("Enter API key for Mistral AI: ")
+             raise ValueError("MISTRAL_KEY is not set. Please set it in your environment.")
 
         os.environ["LANGSMITH_TRACING"] = "true"
         os.environ["LANGSMITH_API_KEY"] = self.LANGSMITH_KEY

@@ -1,0 +1,33 @@
+name: Deploy Application
+
+on:
+  push:
+    branches:
+      - main  # Change this if your default branch is different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker Image
+        run: docker build -t my-container .
+
+      - name: Push Docker Image to Docker Hub
+        run: |
+          docker tag my-container mydockerhubusername/my-container:latest
+          docker push mydockerhubusername/my-container:latest
+
+      - name: Run Docker Container with API Key
+        run: docker run -e MISTRAL_API_KEY="${{ secrets.MISTRAL_API_KEY }}" \
+                 -e OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
+                 -e ANOTHER_API_KEY="${{ secrets.ANOTHER_API_KEY }}" \
+                 -d --name my-container mydockerhubusername/my-container:latest
+
+
