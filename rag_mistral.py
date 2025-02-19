@@ -65,6 +65,10 @@ class RAGSystem:
             ),
         )
         self.docs = self.loader.load()
+
+        print(f"Loaded {self.docs[0]} documents")
+
+
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         self.all_splits = self.text_splitter.split_documents(self.docs)
 
@@ -105,12 +109,15 @@ class RAGSystem:
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         website = sys.argv[1]  # Access the argument
+        print(f"Using website: {website}")
         # Example with dynamic URL
-        rag_system = RAGSystem(website_url=website)
+        rag_system_default = RAGSystem(website_url=website)
 
     else:
         # Or you can still use the default URL if you don't pass one
         rag_system_default = RAGSystem()
 
-    answer_default = rag_system_default.ask_question("What is Task Decomposition?")
+    
+    question = getpass.getpass("What is your question?: ")
+    answer_default = rag_system_default.ask_question(question)
     print(answer_default)
