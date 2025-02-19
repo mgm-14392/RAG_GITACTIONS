@@ -36,5 +36,5 @@ jobs:
             --name my-app-container \
             -e MISTRAL_API_KEY="${{ secrets.MISTRAL_API_KEY }}" \
             -e OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
-            -e ANOTHER_API_KEY="${{ secrets.ANOTHER_API_KEY }}" \
+            -e LANGSMITH_API_KEY="${{ secrets.LANGSMITH_API_KEY }}" \
             ${{ secrets.DOCKER_USERNAME }}/my-container:latest
