@@ -25,12 +25,9 @@ class State(TypedDict):
 class RAGSystem:
     def __init__(self, openai_key=None, langsmith_key=None, mistral_key=None, website_url=None):
         # Set up API keys
-        self.OPENAI_KEY = openai_key or os.getenv("OPENAI_API_KEY")
         self.LANGSMITH_KEY = langsmith_key or os.getenv("LANGSMITH_API_KEY")
         self.MISTRAL_KEY = mistral_key or os.getenv("MISTRAL_API_KEY")
 
-        if not self.OPENAI_KEY:
-            raise ValueError("OPENAI_API_KEY is not set. Please set it in your environment.")
         if not self.LANGSMITH_KEY:
             raise ValueError("LANGSMITH_KEY is not set. Please set it in your environment.")
         if not self.MISTRAL_KEY:
@@ -38,7 +35,6 @@ class RAGSystem:
 
         os.environ["LANGSMITH_TRACING"] = "true"
         os.environ["LANGSMITH_API_KEY"] = self.LANGSMITH_KEY
-        os.environ["OPENAI_API_KEY"] = self.OPENAI_KEY
         os.environ["MISTRAL_API_KEY"] = self.MISTRAL_KEY
 
         # Initialize components
