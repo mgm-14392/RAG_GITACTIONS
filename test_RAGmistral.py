@@ -1,15 +1,17 @@
 import pytest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 from langchain_core.documents import Document
-from rag_mistral import RAGSystem  # Assuming the class is in rag_system.py
+from rag_mistral import RAGSystem  # Assuming the class is in rag_mistral.py
 import time
 
 
 @pytest.fixture
 def setup_rag_system():
     """Fixture to initialize the RAGSystem for tests."""
-    rag_system = RAGSystem()  # Provide a URL or use the default
-    return rag_system
+    # Mock the .docx file loading to avoid file I/O during tests
+    with patch("rag_mistral.DocxDocument"):
+        rag_system = RAGSystem(docx_file_path="recipes.docx")  # Provide a mock .docx file path
+        return rag_system
 
 
 # Unit tests for the RAGSystem class
@@ -84,7 +86,7 @@ def test_retrieval_speed(setup_rag_system):
     start_time = time.time()
     setup_rag_system.retrieve(state)
     elapsed_time = time.time() - start_time
-    assert elapsed_time < 5.0  # Ensure retrieval is under 1 second
+    assert elapsed_time < 5.0  # Ensure retrieval is under 5 seconds
 
 
 def test_generation_speed(setup_rag_system):
@@ -93,4 +95,4 @@ def test_generation_speed(setup_rag_system):
     start_time = time.time()
     setup_rag_system.generate(state)
     elapsed_time = time.time() - start_time
-    assert elapsed_time < 5.0  # Response should be generated in under 5s
+    assert elapsed_time < 5.0  # Response should be generated in under 5 seconds

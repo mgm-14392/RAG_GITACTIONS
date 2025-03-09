@@ -10,6 +10,9 @@ WORKDIR /app
 # Copy the project files into the container
 COPY . .
 
+# Copy the recipes.docx file into the container
+COPY recipes.docx /app/recipes.docx
+
 # Debugging: Show Python version and installed packages
 RUN python --version && pip --version
 
