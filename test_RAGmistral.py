@@ -8,9 +8,14 @@ import time
 @pytest.fixture
 def setup_rag_system():
     """Fixture to initialize the RAGSystem for tests."""
-    # Mock the .docx file loading to avoid file I/O during tests
-    with patch("rag_mistral.DocxDocument"):
-        rag_system = RAGSystem(docx_file_path="recipes.docx")  # Provide a mock .docx file path
+    # Mock the .docx file loading to return a valid Document
+    with patch("rag_mistral.DocxDocument") as mock_docx:
+        # Mock the paragraphs in the .docx file
+        mock_paragraphs = [MagicMock(text="This is a test recipe.")]
+        mock_docx.return_value.paragraphs = mock_paragraphs
+
+        # Initialize the RAGSystem with the mocked .docx file
+        rag_system = RAGSystem(docx_file_path="recipes.docx")
         return rag_system
 
 
