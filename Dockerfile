@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . .
 
 # Copy the recipes.docx file into the container
-COPY recipes.docx /data/recipes.docx
+COPY recipes.docx recipes.docx
 
 # Debugging: Show Python version and installed packages
 RUN python --version && pip --version
