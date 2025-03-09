@@ -62,7 +62,7 @@ class RAGSystem:
         )
         self.docs = self.loader.load()
 
-        print(f"Loaded {self.docs[0]} documents")
+        #print(f"Loaded {self.docs[0]} documents")
 
 
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
@@ -114,6 +114,6 @@ if __name__ == "__main__":
         rag_system_default = RAGSystem()
 
     
-    question = getpass.getpass("What is your question?: ")
-    answer_default = rag_system_default.ask_question(question)
-    print(answer_default)
+    #question = getpass.getpass("What is your question?: ")
+    #answer_default = rag_system_default.ask_question(question)
+    #print(answer_default)
