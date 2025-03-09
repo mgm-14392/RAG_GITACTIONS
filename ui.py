@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template_string
 from rag_mistral import RAGSystem
+import os
 
 app = Flask(__name__)
 
