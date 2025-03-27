@@ -23,7 +23,7 @@ def index():
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Ask a Question</title>
+                <title>How can I help you organize your grocery list ? </title>
                 <style>
                     /* Add custom CSS to style the input box */
                     .question-input {
@@ -63,7 +63,7 @@ def index():
                 </style>
             </head>
             <body>
-                <h1>Ask a Question</h1>
+                <h1>How can I help you organize your grocery list ? </h1>
                 <form method="post">
                     <textarea class="question-input" name="question" placeholder="Enter your question here..."></textarea>
                     <br>
@@ -73,7 +73,7 @@ def index():
                 <p>{{ answer }}</p>
                 
                 <div class="books-header">
-                    <h2>Added books:</h2>
+                    <h2>I know recipes from these books:</h2>
                 </div>
                 <div class="books-grid">
                     {% for image in book_images %}
@@ -91,7 +91,7 @@ def index():
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Ask a Question</title>
+            <title>How can I help you organize your grocery list ? </title>
             <style>
                 /* Add custom CSS to style the input box */
                 .question-input {
@@ -131,7 +131,7 @@ def index():
             </style>
         </head>
         <body>
-            <h1>Ask a Question</h1>
+            <h1>How can I help you organize your grocery list ? </h1>
             <form method="post">
                 <textarea class="question-input" name="question" placeholder="Enter your question here..."></textarea>
                 <br>
@@ -139,7 +139,7 @@ def index():
             </form>
             
             <div class="books-header">
-                <h2>Added books:</h2>
+                <h2>I know recipes from these books:</h2>
             </div>
             <div class="books-grid">
                 {% for image in book_images %}
