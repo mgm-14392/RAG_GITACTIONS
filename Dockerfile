@@ -13,6 +13,9 @@ COPY . .
 # Copy the recipes.docx file into the container
 COPY recipes.docx recipes.docx
 
+#Copy book images
+COPY static/ static/
+
 # Debugging: Show Python version and installed packages
 RUN python --version && pip --version
 
