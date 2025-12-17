@@ -1,7 +1,6 @@
 import getpass
 import os
 from langchain.chat_models import init_chat_model
-from langchain_huggingface import HuggingFaceEmbeddings
 import faiss
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.vectorstores import FAISS
@@ -12,7 +11,7 @@ from langgraph.graph import START, StateGraph
 from typing_extensions import List, TypedDict
 import sys
 from docx import Document as DocxDocument  # For reading .docx files
-
+from pathlib import Path
 
 # Define State structure outside the class for accessibility
 class State(TypedDict):
@@ -23,6 +22,19 @@ class State(TypedDict):
 
 class RAGSystem:
     def __init__(self, openai_key=None, langsmith_key=None, mistral_key=None, docx_file_path=None):
+
+        # Set cache location BEFORE loading any models
+        cache_dir = Path("/app/model_cache")
+        cache_dir.mkdir(parents=True, exist_ok=True)
+
+        # Set cache environment variables
+        os.environ["TRANSFORMERS_CACHE"] = str(cache_dir)
+        os.environ["HF_HOME"] = str(cache_dir)
+        os.environ["HF_DATASETS_CACHE"] = str(cache_dir)
+        
+        # Load the embeddings with explicit cache folder
+        from langchain_huggingface import HuggingFaceEmbeddings
+        
         # Set up API keys
         self.LANGSMITH_KEY = langsmith_key or os.getenv("LANGSMITH_API_KEY")
         self.MISTRAL_KEY = mistral_key or os.getenv("MISTRAL_API_KEY")
@@ -38,7 +50,15 @@ class RAGSystem:
 
         # Initialize components
         self.llm = init_chat_model("mistral-large-latest", model_provider="mistralai")
-        self.embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+        try:
+            self.embeddings = HuggingFaceEmbeddings(
+                model_name="sentence-transformers/all-mpnet-base-v2",
+                cache_folder=str(cache_dir)  # Explicitly tell it where to look
+            )
+        except Exception as e:
+            print(f"Error loading embeddings: {e}")
+        
         self.index = faiss.IndexFlatL2(len(self.embeddings.embed_query("hello world")))
         self.vector_store = FAISS(
             embedding_function=self.embeddings,

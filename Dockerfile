@@ -1,34 +1,49 @@
 # Use an official lightweight Python image
 FROM python:3.10-slim
 
-# Set environment variables to avoid buffering
+# Set environment variables
 ENV PYTHONUNBUFFERED=1
+ENV TRANSFORMERS_CACHE=/app/model_cache
+ENV HF_HOME=/app/model_cache
+ENV HF_DATASETS_CACHE=/app/model_cache
+ENV XDG_CACHE_HOME=/app/model_cache
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the project files into the container
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Create cache directory and download model as root
+RUN mkdir -p /app/model_cache && \
+    python -c "from sentence_transformers import SentenceTransformer; \
+    import os; \
+    print('Cache directory:', os.environ.get('TRANSFORMERS_CACHE')); \
+    model = SentenceTransformer('sentence-transformers/all-mpnet-base-v2', \
+                               cache_folder='/app/model_cache'); \
+    print('Model downloaded and cached')"
+
+# Copy the rest of the application
 COPY . .
 
 # Copy the recipes.docx file into the container
 COPY recipes.docx recipes.docx
 
-#Copy book images
+# Copy book images
 COPY static/ static/
 
-# Debugging: Show Python version and installed packages
-RUN python --version && pip --version
+# Create non-root user
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && \
+    chown -R appuser:appuser /app
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Expose a port (only necessary if you're running a web API)
-EXPOSE 8080  
-
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
-# During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
+EXPOSE 8080
+
 CMD ["python", "ui.py"]
