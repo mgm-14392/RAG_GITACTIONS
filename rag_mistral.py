@@ -38,7 +38,7 @@ class RAGSystem:
 
         # Initialize components
         self.llm = init_chat_model("mistral-large-latest", model_provider="mistralai")
-        self.embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+        self.embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
         self.index = faiss.IndexFlatL2(len(self.embeddings.embed_query("hello world")))
         self.vector_store = FAISS(
             embedding_function=self.embeddings,
